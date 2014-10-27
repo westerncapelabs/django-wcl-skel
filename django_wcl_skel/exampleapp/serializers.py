@@ -18,3 +18,4 @@ class DummyModelSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = DummyModel
         fields = ('msisdn', 'product_code', 'data')
+
