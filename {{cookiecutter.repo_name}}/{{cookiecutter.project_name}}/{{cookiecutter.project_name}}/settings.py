@@ -50,7 +50,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     # us
-    'exampleapp',
+    '{{cookiecutter.app_name}}',
 
 )
 
