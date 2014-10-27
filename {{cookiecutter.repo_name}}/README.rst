@@ -1,4 +1,4 @@
-django-wcl-skel
+{{cookiecutter.repo_name}}
 =======================================
 
 Setup
