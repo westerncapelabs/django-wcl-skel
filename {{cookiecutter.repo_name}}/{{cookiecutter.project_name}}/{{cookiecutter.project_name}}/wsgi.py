@@ -1,5 +1,5 @@
 """
-WSGI config for django_wcl_skel project.
+WSGI config for {{cookiecutter.project_name}} project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -8,7 +8,8 @@ https://docs.djangoproject.com/en/1.7/howto/deployment/wsgi/
 """
 
 import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_wcl_skel.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE",
+                      "{{cookiecutter.project_name}}.settings")
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
