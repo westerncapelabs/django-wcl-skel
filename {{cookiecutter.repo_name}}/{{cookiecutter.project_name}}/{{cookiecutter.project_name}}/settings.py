@@ -1,5 +1,5 @@
 """
-Django settings for django_wcl_skel project.
+Django settings for {{cookiecutter.project_name}} project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -64,16 +64,16 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'django_wcl_skel.urls'
+ROOT_URLCONF = '{{cookiecutter.project_name}}.urls'
 
-WSGI_APPLICATION = 'django_wcl_skel.wsgi.application'
+WSGI_APPLICATION = '{{cookiecutter.project_name}}.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default='postgres:///django_wcl_skel'),
+    'default': dj_database_url.config(default='postgres:///{{cookiecutter.project_name}}'),
 }
 
 
