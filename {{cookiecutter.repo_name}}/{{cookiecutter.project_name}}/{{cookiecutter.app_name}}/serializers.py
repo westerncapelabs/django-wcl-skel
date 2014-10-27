@@ -14,6 +14,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ('url', 'name')
 
+
 class DummyModelSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = DummyModel
