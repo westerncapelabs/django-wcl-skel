@@ -15,7 +15,7 @@ RUN mkdir -p /var/log/wcl/{{cookiecutter.project_name}}
 
 # Add local repo, and remove the Dockerfile for caching
 ADD . /srv/wcl/{{cookiecutter.repo_name}}
-RUN rm /srv/wcl/adrian-repo/Dockerfile
+RUN rm /srv/wcl/{{cookiecutter.repo_name}}/Dockerfile
 
 # Python apps
 RUN pip install -r /srv/wcl/{{cookiecutter.repo_name}}/{{cookiecutter.project_name}}/requirements.txt
