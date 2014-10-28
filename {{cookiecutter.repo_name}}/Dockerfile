@@ -11,8 +11,11 @@ RUN apt-get install -y libpq-dev python-dev
 
 # Mount the project
 RUN mkdir -p /srv/wcl/{{cookiecutter.repo_name}}
-ADD . /srv/wcl/{{cookiecutter.repo_name}}
 RUN mkdir /var/log/wcl/
+
+# Add local repo, and remove the Dockerfile for caching
+ADD . /srv/wcl/{{cookiecutter.repo_name}}
+RUN rm /srv/wcl/adrian-repo/Dockerfile
 
 # Python apps
 RUN pip install -r /srv/wcl/{{cookiecutter.repo_name}}/{{cookiecutter.project_name}}/requirements.txt
