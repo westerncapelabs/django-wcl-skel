@@ -11,7 +11,7 @@ RUN apt-get install -y libpq-dev python-dev
 
 # Mount the project
 RUN mkdir -p /srv/wcl/{{cookiecutter.repo_name}}
-RUN mkdir -p /var/log/wcl/{{cookiecutter.project_name}}
+RUN mkdir -p /var/log/wcl/{{cookiecutter.repo_name}}
 
 # Add local repo, and remove the Dockerfile for caching
 ADD . /srv/wcl/{{cookiecutter.repo_name}}
