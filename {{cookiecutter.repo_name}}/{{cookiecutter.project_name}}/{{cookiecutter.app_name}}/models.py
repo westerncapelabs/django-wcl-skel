@@ -17,4 +17,5 @@ class DummyModel(HStoreModel):
     """
     msisdn = models.BigIntegerField()
     product_code = models.CharField(max_length=20)
-    data = hstore.DictionaryField()  # can pass attributes like null, blank, ecc.
+    # can pass attributes like null, blank, etc.
+    data = hstore.DictionaryField()

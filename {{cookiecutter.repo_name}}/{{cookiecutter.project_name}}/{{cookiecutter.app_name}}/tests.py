@@ -5,8 +5,7 @@ from rest_framework.test import APIClient
 from rest_framework.authtoken.models import Token
 
 
-from .models import *
-from .serializers import *
+from {{cookiecutter.app_name}}.models import DummyModel
 
 
 class APITestCase(TestCase):
@@ -58,4 +57,3 @@ class TestExampleAppHStore(AuthenticatedAPITestCase):
         self.assertEqual(d.msisdn, 1234)
         self.assertEqual(d.product_code, 'test_code')
         self.assertEqual(d.data, {'a': 'a', 'b': '2'})
-
