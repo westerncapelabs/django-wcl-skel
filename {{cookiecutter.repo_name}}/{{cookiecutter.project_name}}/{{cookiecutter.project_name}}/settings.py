@@ -98,6 +98,7 @@ STATICFILES_FINDERS = (
 )
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # TEMPLATE_CONTEXT_PROCESSORS = (
 #     "django.core.context_processors.request",
