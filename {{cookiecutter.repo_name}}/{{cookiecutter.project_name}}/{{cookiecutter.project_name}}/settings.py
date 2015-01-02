@@ -72,7 +72,7 @@ WSGI_APPLICATION = '{{cookiecutter.project_name}}.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgres:///{{cookiecutter.project_name}}'),
+        default='postgres://postgres:@localhost/{{cookiecutter.project_name}}'),
 }
 
 
