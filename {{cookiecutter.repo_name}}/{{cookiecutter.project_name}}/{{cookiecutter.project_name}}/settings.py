@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'raven.contrib.django.raven_compat',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
     # us
     '{{cookiecutter.app_name}}',
 
@@ -113,12 +114,17 @@ RAVEN_CONFIG = {
 # REST Framework conf defaults
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
-    'PAGINATE_BY': 10,
+    'PAGINATE_BY': None,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
 }
+try:
+    from local_settings import *
+except ImportError:
+    pass
