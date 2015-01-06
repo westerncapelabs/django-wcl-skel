@@ -1,5 +1,6 @@
 {
     "repo_name": "django-wcl-skel",
     "project_name": "django_wcl_skel",
-    "app_name": "exampleapp"
+    "app_name": "exampleapp",
+    "domain_name": "exampleapp.westerncapelabs.com"
 }
