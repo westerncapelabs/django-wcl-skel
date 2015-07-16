@@ -1,11 +1,13 @@
 import json
+
+from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 from rest_framework.authtoken.models import Token
 
 
-from {{cookiecutter.app_name}}.models import DummyModel
+from .models import DummyModel
 
 
 class APITestCase(TestCase):
@@ -43,7 +45,6 @@ class TestExampleAppHStore(AuthenticatedAPITestCase):
 
     def test_create_dummy_model_data(self):
         post_data = {
-            "msisdn": 1234,
             "product_code": "test_code",
             "data": {'a': 'a', 'b': 2}
         }
@@ -54,6 +55,5 @@ class TestExampleAppHStore(AuthenticatedAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         d = DummyModel.objects.last()
-        self.assertEqual(d.msisdn, 1234)
         self.assertEqual(d.product_code, 'test_code')
         self.assertEqual(d.data, {'a': 'a', 'b': '2'})

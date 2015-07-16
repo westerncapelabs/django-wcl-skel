@@ -19,14 +19,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'REPLACEMEPLSKTNKSBAI'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'REPLACEME')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', False)
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '{{cookiecutter.domain_name}}']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -72,7 +72,9 @@ WSGI_APPLICATION = '{{cookiecutter.project_name}}.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgres://postgres:@localhost/{{cookiecutter.project_name}}'),
+        default=os.environ.get(
+            '{{cookiecutter.env_prefix}}_DATABASE',
+            'postgres://postgres:@localhost/{{cookiecutter.project_name}}')),
 }
 
 
@@ -98,8 +100,8 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
 )
 
+STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # TEMPLATE_CONTEXT_PROCESSORS = (
 #     "django.core.context_processors.request",
@@ -108,7 +110,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Sentry configuration
 RAVEN_CONFIG = {
     # DevOps will supply you with this.
-    # 'dsn': 'http://public:secret@example.com/1',
+    'dsn': os.environ.get('{{cookiecutter.env_prefix}}_SENTRY_DSN', ""),
 }
 
 # REST Framework conf defaults
@@ -124,7 +126,32 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
 }
-try:
-    from local_settings import *
-except ImportError:
-    pass
+
+# Celery configuration options
+CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
+BROKER_URL = os.environ.get('{{cookiecutter.env_prefix}}_REDIS', 'redis://localhost:6379/0')
+
+from kombu import Exchange, Queue
+
+CELERY_DEFAULT_QUEUE = '{{cookiecutter.project_name}}'
+CELERY_QUEUES = (
+    Queue('{{cookiecutter.project_name}}',
+          Exchange('{{cookiecutter.project_name}}'),
+          routing_key='{{cookiecutter.project_name}}'),
+)
+
+CELERY_ALWAYS_EAGER = False
+
+# Tell Celery where to find the tasks
+CELERY_IMPORTS = (
+    '{{cookiecutter.app_name}}.tasks',
+)
+
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
+
+import djcelery
+djcelery.setup_loader()

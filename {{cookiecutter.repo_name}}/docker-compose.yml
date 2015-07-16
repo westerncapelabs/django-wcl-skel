@@ -1,0 +1,56 @@
+nginxproxy:
+  restart: always
+  image: jwilder/nginx-proxy
+  volumes:
+    - /var/run/docker.sock:/tmp/docker.sock:ro
+  ports:
+    - "80:80"
+
+{{cookiecutter.docker_prefix}}:
+  restart: always
+  build: ./
+  expose:
+    - "8001"
+  links:
+    - {{cookiecutter.docker_prefix}}db:{{cookiecutter.docker_prefix}}db
+  env_file: {{cookiecutter.project_name}}.env
+  command: /usr/local/bin/gunicorn {{cookiecutter.project_name}}.wsgi:application -w 2 -b :8001
+
+{{cookiecutter.docker_prefix}}db:
+  restart: always
+  image: aidanlister/postgres-hstore:latest
+  volumes_from:
+    - {{cookiecutter.docker_prefix}}dbdata
+  ports:
+    - "5433:5432"
+
+{{cookiecutter.docker_prefix}}dbdata:
+  restart: no
+  image: aidanlister/postgres-hstore:latest
+  volumes:
+    - /var/lib/postgresql
+  command: true
+
+{{cookiecutter.docker_prefix}}celery:
+  restart: always
+  build: ./
+  links:
+    - {{cookiecutter.docker_prefix}}db:{{cookiecutter.docker_prefix}}db
+    - {{cookiecutter.docker_prefix}}redis:{{cookiecutter.docker_prefix}}redis
+  env_file: {{cookiecutter.project_name}}.env
+  command: /usr/local/bin/python manage.py celery worker --loglevel=info
+
+{{cookiecutter.docker_prefix}}celerybeat:
+  restart: always
+  build: ./
+  links:
+    - {{cookiecutter.docker_prefix}}db:{{cookiecutter.docker_prefix}}db
+    - {{cookiecutter.docker_prefix}}redis:{{cookiecutter.docker_prefix}}redis
+  env_file: {{cookiecutter.project_name}}.env
+  command: /usr/local/bin/python manage.py celery beat --loglevel=info
+
+{{cookiecutter.docker_prefix}}redis:
+  restart: always
+  image: redis:latest
+  ports:
+    - "6379:6379"

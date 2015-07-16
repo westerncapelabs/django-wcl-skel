@@ -18,4 +18,4 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class DummyModelSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = DummyModel
-        fields = ('msisdn', 'product_code', 'data')
+        fields = ('url', 'id', 'product_code', 'data')

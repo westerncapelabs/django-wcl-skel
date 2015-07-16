@@ -1,4 +1,5 @@
 Django
+djangorestframework
 djangorestframework-hstore
 dj-database-url
 psycopg2
@@ -6,4 +7,7 @@ raven
 django-grappelli
 gunicorn
 django-filter
-fabric
+dj-static
+celery
+django-celery
+redis
