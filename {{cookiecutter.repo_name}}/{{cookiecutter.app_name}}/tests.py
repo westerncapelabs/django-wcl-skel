@@ -34,13 +34,13 @@ class TestExampleAppHStore(AuthenticatedAPITestCase):
 
     def test_login(self):
         request = self.client.post(
-            '/{{cookiecutter.app_name}}/api-token-auth/',
+            '/{{cookiecutter.app_name}}/api/token-auth/',
             {"username": "testuser", "password": "testpass"})
         token = request.data.get('token', None)
         self.assertIsNotNone(
             token, "Could not receive authentication token on login post.")
         self.assertEqual(request.status_code, 200,
-                         "Status code on /auth/login was %s (should be 200)."
+                         "Status code on /api/token-auth was %s (should be 200)."
                          % request.status_code)
 
     def test_create_dummy_model_data(self):
@@ -48,7 +48,7 @@ class TestExampleAppHStore(AuthenticatedAPITestCase):
             "product_code": "test_code",
             "data": {'a': 'a', 'b': 2}
         }
-        response = self.client.post('/{{cookiecutter.app_name}}/dummy/',
+        response = self.client.post('/{{cookiecutter.app_name}}/api/v1/dummy/',
                                     json.dumps(post_data),
                                     content_type='application/json')
 

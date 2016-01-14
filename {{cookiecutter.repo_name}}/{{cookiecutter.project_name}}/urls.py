@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
+admin.site.site_header = os.environ.get('{{cookiecutter.env_prefix}}_TITLE', '{{cookiecutter.project_name}} Admin')
+
 
 urlpatterns = patterns(
     '',

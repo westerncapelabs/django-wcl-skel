@@ -33,7 +33,6 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = (
     # admin
-    'grappelli',
     'django.contrib.admin',
     # core
     'django.contrib.auth',
@@ -42,7 +41,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 3rd party
-    'django_hstore',
     'raven.contrib.django.raven_compat',
     'rest_framework',
     'rest_framework.authtoken',
@@ -116,7 +114,7 @@ RAVEN_CONFIG = {
 # REST Framework conf defaults
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
-    'PAGINATE_BY': None,
+    'PAGINATE_BY': 1000,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
@@ -131,7 +129,7 @@ REST_FRAMEWORK = {
 CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
-BROKER_URL = os.environ.get('{{cookiecutter.env_prefix}}_REDIS', 'redis://localhost:6379/0')
+BROKER_URL = os.environ.get('RABBITMQ_URL', 'redis://localhost:6379/0')
 
 from kombu import Exchange, Queue
 
