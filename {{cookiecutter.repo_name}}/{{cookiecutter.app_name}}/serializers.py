@@ -16,6 +16,9 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class DummyModelSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = DummyModel
-        fields = ('url', 'id', 'product_code', 'data')
+        read_only_fields = ('created_by', 'updated_by')
+        fields = ('url', 'id', 'product_code', 'data', 'created_at',
+                  'created_by', 'updated_at', 'updated_by')

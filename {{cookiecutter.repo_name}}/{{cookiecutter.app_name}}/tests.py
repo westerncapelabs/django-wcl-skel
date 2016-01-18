@@ -30,11 +30,11 @@ class AuthenticatedAPITestCase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
 
 
-class TestExampleAppHStore(AuthenticatedAPITestCase):
+class TestExampleApp(AuthenticatedAPITestCase):
 
     def test_login(self):
         request = self.client.post(
-            '/{{cookiecutter.app_name}}/api/token-auth/',
+            '/api/token-auth/',
             {"username": "testuser", "password": "testpass"})
         token = request.data.get('token', None)
         self.assertIsNotNone(
@@ -48,7 +48,7 @@ class TestExampleAppHStore(AuthenticatedAPITestCase):
             "product_code": "test_code",
             "data": {'a': 'a', 'b': 2}
         }
-        response = self.client.post('/{{cookiecutter.app_name}}/api/v1/dummy/',
+        response = self.client.post('/api/v1/dummy/',
                                     json.dumps(post_data),
                                     content_type='application/json')
 
@@ -56,4 +56,4 @@ class TestExampleAppHStore(AuthenticatedAPITestCase):
 
         d = DummyModel.objects.last()
         self.assertEqual(d.product_code, 'test_code')
-        self.assertEqual(d.data, {'a': 'a', 'b': '2'})
+        self.assertEqual(d.data, {'a': 'a', 'b': 2})

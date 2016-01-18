@@ -6,23 +6,24 @@ from .serializers import (UserSerializer, GroupSerializer,
                           DummyModelSerializer)
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
     """
     API endpoint that allows users to be viewed or edited.
     """
+    permission_classes = (IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
-class GroupViewSet(viewsets.ModelViewSet):
+class GroupViewSet(viewsets.ReadOnlyModelViewSet):
 
     """
     API endpoint that allows groups to be viewed or edited.
     """
+    permission_classes = (IsAuthenticated,)
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-
 
 class DummyModelViewSet(viewsets.ModelViewSet):
 
@@ -32,3 +33,11 @@ class DummyModelViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = DummyModel.objects.all()
     serializer_class = DummyModelSerializer
+
+    # TODO make this work in test harness, works in production
+    # def perform_create(self, serializer):
+    #     serializer.save(created_by=self.request.user,
+    #                     updated_by=self.request.user)
+    #
+    # def perform_update(self, serializer):
+    #     serializer.save(updated_by=self.request.user)

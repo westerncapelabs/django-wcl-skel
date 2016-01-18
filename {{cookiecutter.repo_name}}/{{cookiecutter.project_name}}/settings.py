@@ -108,7 +108,7 @@ STATIC_URL = '/static/'
 # Sentry configuration
 RAVEN_CONFIG = {
     # DevOps will supply you with this.
-    'dsn': os.environ.get('{{cookiecutter.env_prefix}}_SENTRY_DSN', ""),
+    'dsn': os.environ.get('{{cookiecutter.env_prefix}}_SENTRY_DSN', None),
 }
 
 # REST Framework conf defaults
