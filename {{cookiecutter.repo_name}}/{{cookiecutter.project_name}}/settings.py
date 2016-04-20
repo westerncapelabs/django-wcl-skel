@@ -2,10 +2,10 @@
 Django settings for {{cookiecutter.project_name}} project.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/1.7/topics/settings/
+https://docs.djangoproject.com/en/1.9/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.7/ref/settings/
+https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
@@ -16,7 +16,7 @@ import dj_database_url
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'REPLACEME')
@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
+    'rest_hooks',
     # us
     '{{cookiecutter.app_name}}',
 
@@ -66,7 +67,7 @@ WSGI_APPLICATION = '{{cookiecutter.project_name}}.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
+# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {
     'default': dj_database_url.config(
@@ -77,7 +78,7 @@ DATABASES = {
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.7/topics/i18n/
+# https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'en-gb'
 
@@ -91,7 +92,7 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.7/howto/static-files/
+# https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -114,7 +115,9 @@ RAVEN_CONFIG = {
 # REST Framework conf defaults
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
-    'PAGINATE_BY': 1000,
+    'PAGE_SIZE': 1000,
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
@@ -125,11 +128,21 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
 }
 
+# Webhook event definition
+HOOK_EVENTS = {
+    # 'any.event.name': 'App.Model.Action' (created/updated/deleted)
+    'dummymodel.added': '{{cookiecutter.app_name}}.DummyModel.created+'
+}
+
+HOOK_DELIVERER = '{{cookiecutter.project_name}}.tasks.deliver_hook_wrapper'
+
+HOOK_AUTH_TOKEN = os.environ.get('HOOK_AUTH_TOKEN', 'REPLACEME')
+
 # Celery configuration options
 CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
-BROKER_URL = os.environ.get('RABBITMQ_URL', 'redis://localhost:6379/0')
+BROKER_URL = os.environ.get('BROKER_URL', 'redis://localhost:6379/0')
 
 from kombu import Exchange, Queue
 
@@ -146,6 +159,16 @@ CELERY_ALWAYS_EAGER = False
 CELERY_IMPORTS = (
     '{{cookiecutter.app_name}}.tasks',
 )
+
+CELERY_CREATE_MISSING_QUEUES = True
+CELERY_ROUTES = {
+    'celery.backend_cleanup': {
+        'queue': 'mediumpriority',
+    },
+    '{{cookiecutter.app_name}}.tasks.deliver_hook_wrapper': {
+        'queue': 'priority',
+    },
+}
 
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

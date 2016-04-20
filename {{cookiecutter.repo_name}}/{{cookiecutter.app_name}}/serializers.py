@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User, Group
 from .models import DummyModel
+from rest_hooks.models import Hook
 from rest_framework import serializers
 
 
@@ -22,3 +23,10 @@ class DummyModelSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields = ('created_by', 'updated_by')
         fields = ('url', 'id', 'product_code', 'data', 'created_at',
                   'created_by', 'updated_at', 'updated_by')
+
+
+class HookSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Hook
+        read_only_fields = ('user',)
